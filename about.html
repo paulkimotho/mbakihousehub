@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>About - Mbaki House Hub</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    :root { --mbaki-maroon: #8C1D26; }
+    .dropdown-item:hover { color: var(--mbaki-maroon); }
+    .image-card { border-radius: 0.75rem; overflow: hidden; box-shadow: 0 8px 20px rgba(0,0,0,0.08); }
+
+    /* HERO (short maroon like dedicated desk) */
+    .hero-small-maroon {
+      background: var(--mbaki-maroon);
+      color: #fff;
+      padding: 3rem 0;
+      min-height: 160px;
+      display: flex;
+      align-items: center;
+    }
+    @media (max-width:768px) {
+      .hero-small-maroon { min-height: 140px; padding: 2rem 0; }
+    }
+    .hero-inner-card {
+      background: rgba(255,255,255,0.95);
+      color: #222;
+      padding: 20px 28px;
+      border-radius: 10px;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+      max-width: 860px;
+      text-align: center;
+      margin: 0 auto;
+    }
+    .hero-inner-card h1 { color: var(--mbaki-maroon); font-size: 1.9rem; margin-bottom: .5rem; }
+    .hero-inner-card p  { color: #4b5563; margin-bottom: .75rem; }
+
+    /* NAVBAR */
+    .nav-inner { max-width: 1100px; margin: 0 auto; padding: 0 1rem; }
+    .navbar-logo {
+      width: 36px;
+      height: 36px;
+      object-fit: contain;
+      display: inline-block;
+    }
+  </style>
+
+  <!-- dropdown logic -->
+  <script>
+document.addEventListener("DOMContentLoaded", function () {
+  const closeAll = () => {
+    document.querySelectorAll('[data-dropdown-menu]').forEach(menu => {
+      menu.classList.add('hidden');
+      const name = menu.getAttribute('data-dropdown-menu');
+      const btn = document.querySelector('[data-dropdown="'+name+'"]');
+      if (btn) btn.setAttribute('aria-expanded','false');
+    });
+  };
+
+  const toggleMenu = (name) => {
+    const menu = document.querySelector('[data-dropdown-menu="'+name+'"]');
+    const btn = document.querySelector('[data-dropdown="'+name+'"]');
+    if (!menu) return;
+    const isHidden = menu.classList.contains('hidden');
+    closeAll();
+    if (isHidden) {
+      menu.classList.remove('hidden');
+      if (btn) btn.setAttribute('aria-expanded','true');
+    }
+  };
+
+  document.addEventListener('click', (e) => {
+    const btn = e.target.closest('[data-dropdown]');
+    if (btn) {
+      e.preventDefault();
+      const name = btn.getAttribute('data-dropdown');
+      toggleMenu(name);
+      return;
+    }
+    if (!e.target.closest('[data-dropdown-menu]')) closeAll();
+  });
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') closeAll();
+  });
+
+  // ✅ Wait until DOM is ready, now safely select elements
+  const mobileBtn = document.getElementById('mobile-menu-button');
+  const mobileMenu = document.getElementById('mobile-menu');
+  if (mobileBtn && mobileMenu) {
+    mobileBtn.addEventListener('click', () => {
+      mobileMenu.classList.toggle('hidden');
+    });
+  }
+
+  window.addEventListener('resize', () => closeAll());
+});
+</script>
+
+</head>
+
+<body class="font-sans text-gray-800">
+
+  <!-- NAVBAR (functional, matches other pages, includes logo) -->
+ <!-- REPLACE YOUR NAVBAR WITH THIS BLOCK -->
+<nav class="bg-white shadow relative" aria-label="Main navigation">
+  <div class="nav-inner">
+    <div class="flex items-center justify-between h-16">
+      <!-- Left: logo + brand text -->
+      <div class="flex items-center space-x-2">
+        <img src="images/Mbakilogo.png" alt="Mbaki House Hub Logo" class="navbar-logo">
+        <div class="leading-tight">
+          <div class="font-semibold text-[var(--mbaki-maroon)] text-lg">Mbaki House Hub</div>
+          <div class="text-sm text-gray-600 -mt-1">Gakere Road</div>
+        </div>
+      </div>
+
+      <!-- Desktop Nav -->
+      <div class="hidden md:flex md:items-center md:space-x-6">
+        <a href="index.html" class="text-gray-700 hover:text-[var(--mbaki-maroon)] font-medium">Home</a>
+
+        <div class="relative">
+          <button data-dropdown="workspaces" aria-expanded="false" class="inline-flex items-center text-gray-700 hover:text-[var(--mbaki-maroon)] font-medium focus:outline-none">
+            Workspaces
+            <svg class="ml-1 h-4 w-4" xmlns="http://www.w3.org/2000/svg" fill="none"
+                 viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round"
+                 stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+          </button>
+          <div id="menu-workspaces" data-dropdown-menu="workspaces"
+               class="hidden absolute right-0 mt-2 w-56 bg-white rounded-md shadow-lg ring-1 ring-black ring-opacity-5 z-50">
+            <a href="shared-desk.html" class="block px-4 py-2 text-gray-700 dropdown-item">Shared Desk</a>
+            <a href="dedicated-desk.html" class="block px-4 py-2 text-gray-700 dropdown-item">Dedicated Desk</a>
+            <a href="meeting-room.html" class="block px-4 py-2 text-gray-700 dropdown-item">BoardRoom</a>
+            <a href="private-office.html" class="block px-4 py-2 text-gray-700 dropdown-item">Private Offices</a>
+          </div>
+        </div>
+
+        <!-- <div class="relative">
+          <button data-dropdown="events" aria-expanded="false" class="inline-flex items-center text-gray-700 hover:text-[var(--mbaki-maroon)] font-medium focus:outline-none">
+            Events
+            <svg class="ml-1 h-4 w-4" xmlns="http://www.w3.org/2000/svg" fill="none"
+                 viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round"
+                 stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+          </button>
+          <div id="menu-events" data-dropdown-menu="events"
+               class="hidden absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg ring-1 ring-black ring-opacity-5 z-50">
+            <a href="event-space.html" class="block px-4 py-2 text-gray-700 dropdown-item">Event Space</a>
+            <a href="upcoming-events.html" class="block px-4 py-2 text-gray-700 dropdown-item">Upcoming Events</a>
+          </div>
+        </div> -->
+
+        <a href="upcoming-events.html" class="text-gray-700 hover:text-[var(--mbaki-maroon)] font-medium">Events</a>
+        <a href="about.html" class="text-gray-700 hover:text-[var(--mbaki-maroon)] font-medium">About</a>
+      </div>
+
+      <!-- Mobile Menu Button -->
+      <div class="md:hidden">
+        <button id="mobile-menu-button" class="p-2 rounded-md text-[var(--mbaki-maroon)] hover:bg-gray-100 focus:outline-none" aria-expanded="false" aria-controls="mobile-menu">
+          <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+          </svg>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MOBILE MENU (hidden by default; toggled by the button above) -->
+  <div id="mobile-menu" class="hidden md:hidden mt-2">
+    <div class="px-2 pt-2 pb-3 space-y-1">
+      <a href="index.html" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:bg-gray-50">Home</a>
+
+      <details class="bg-white rounded-md">
+        <summary class="px-3 py-2 cursor-pointer text-gray-700 font-medium">Workspaces</summary>
+        <div class="pl-4">
+          <a href="shared-desk.html" class="block px-3 py-2 text-gray-700">Shared Desk</a>
+          <a href="dedicated-desk.html" class="block px-3 py-2 text-gray-700">Dedicated Desk</a>
+          <a href="meeting-room.html" class="block px-3 py-2 text-gray-700">Boardroom</a>
+          <a href="private-office.html" class="block px-3 py-2 text-gray-700">Private Offices</a>
+        </div>
+      </details>
+
+      <!-- <details class="bg-white rounded-md mt-1">
+        <summary class="px-3 py-2 cursor-pointer text-gray-700 font-medium">Events</summary>
+        <div class="pl-4">
+          <a href="event-space.html" class="block px-3 py-2 text-gray-700">Event Space</a>
+          <a href="upcoming-events.html" class="block px-3 py-2 text-gray-700">Upcoming Events</a>
+        </div>
+      </details> -->
+
+      <a href="upcoming-events.html" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:bg-gray-50">Events</a>
+      <a href="about.html" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:bg-gray-50">About</a>
+    </div>
+  </div>
+</nav>
+
+
+  <!-- HERO (short maroon like dedicated desk) -->
+  <header class="hero-small-maroon" role="banner" aria-label="About hero">
+    <div class="nav-inner">
+      <div class="hero-inner-card">
+        <h1>About Mbaki House Hub</h1>
+        <p>Peace, productivity, and connection — a calm workspace in the heart of Nyeri.</p>
+        <a href="workspaces.html" class="inline-block mt-2 bg-[var(--mbaki-maroon)] text-white px-5 py-2 rounded-md font-semibold">Explore Workspaces</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- ABOUT CONTENT (Our Story + rest remains unchanged) -->
+  <section class="container mx-auto px-6 py-14">
+    <div class="grid gap-10 lg:grid-cols-2 lg:items-center">
+      <div class="image-card">
+        <img src="images/stairs.jpg" alt="Mbaki House large image" class="w-full h-[520px] object-cover">
+      </div>
+
+      <div>
+        <h2 class="text-2xl font-semibold mb-4" style="color: var(--mbaki-maroon)">Our Story</h2>
+        <p class="text-gray-700 mb-4 leading-relaxed">
+          Mbaki House is situated along Nyeri’s bustling Gakere Road — named after the pre-colonial chief Gakere wa Ngunju.
+          Even though Gakere Road is one of the town’s busiest commercial arteries, Mbaki House Hub offers a calm, inviting space to work, collaborate and build.
+        </p>
+
+        <p class="text-gray-700 mb-6 leading-relaxed">
+          We chose this location for convenience: there’s ample parking and quick access to restaurants, banks, and other essential services.
+          Our members enjoy reliable Wi-Fi, power backup, and a community of serious professionals who value focus and connection.
+        </p>
+
+        <a href="workspaces.html" class="inline-block px-6 py-3 rounded-lg text-white font-medium shadow" style="background: var(--mbaki-maroon)">Explore Workspaces</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACT & MAP SECTION -->
+  <section class="bg-gray-50 py-16">
+    <div class="container mx-auto px-6 max-w-6xl">
+      <h2 class="text-2xl font-semibold mb-8 text-center" style="color: var(--mbaki-maroon)">Contact & Location</h2>
+
+      <div class="grid md:grid-cols-2 gap-10">
+        <div>
+          <h3 class="text-xl font-semibold mb-3">Get in Touch</h3>
+          <p class="text-gray-700 mb-2">Phone: <a href="tel:+254724840312" class="text-[var(--mbaki-maroon)]">+254 724 840 312</a></p>
+          <p class="text-gray-700 mb-2">Email: <a href="mailto:hello@mbakihouse.co.ke" class="text-[var(--mbaki-maroon)]">xyz@email.com</a></p>
+          <p class="text-gray-700 mb-4">Address: Mbaki House Building, Gakere Road, Nyeri, Kenya</p>
+
+          <a href="https://wa.me/254768275201"
+             class="inline-block px-4 py-2 rounded-md border border-[var(--mbaki-maroon)] text-[var(--mbaki-maroon)] hover:bg-[var(--mbaki-maroon)] hover:text-white transition">
+             Chat on WhatsApp
+          </a>
+        </div>
+
+        <div class="rounded-lg overflow-hidden shadow">
+          <iframe src="https://www.google.com/maps?q=Mbaki+House+Gakere+Road+Nyeri&output=embed"
+                  class="w-full h-72 border-0" allowfullscreen="" loading="lazy"
+                  referrerpolicy="no-referrer-when-downgrade" title="Mbaki House Hub on Google Maps"></iframe>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+ <footer class="bg-[#8C1D26] text-white pt-12 pb-8">
+  <div class="max-w-7xl mx-auto px-6">
+    <!-- Top Section -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-8 pb-10 border-b border-white/20">
+      
+      <!-- Logo + Brand -->
+      <div class="flex flex-col items-center md:items-start space-y-3">
+        <div class="flex items-center space-x-2">
+          <img src="images/Mbakilogo.png" alt="Mbaki House Hub Logo" class="h-10 w-auto">
+          <span class="text-lg font-semibold">Mbaki House Hub</span>
+        </div>
+        <p class="text-sm text-white/90 max-w-xs">
+          Spaces that inspire productivity, collaboration and growth.
+        </p>
+
+        <!-- Contact -->
+        <div class="flex items-center gap-2 text-sm text-white/90 mt-2">
+          <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.518 4.552a1 1 0 01-.272.993l-1.94 1.94a16.012 16.012 0 007.07 7.07l1.94-1.94a1 1 0 01.993-.272l4.552 1.518A1 1 0 0121 18.72V22a2 2 0 01-2 2h-1C9.716 24 0 14.284 0 2a2 2 0 012-2h1z" />
+          </svg>
+          <a href="tel:0768275201" class="hover:text-[#FFD966] transition">0768 275 201</a>
+        </div>
+      </div>
+
+      <!-- Quick Links -->
+      <div class="flex flex-col items-center md:items-start space-y-2">
+        <h3 class="text-sm font-semibold uppercase tracking-wide text-white/90 mb-1">Quick Links</h3>
+        <a href="index.html" class="hover:text-[#FFD966] transition">Home</a>
+        <a href="upcoming-events.html" class="hover:text-[#FFD966] transition">Events</a>
+        <a href="about.html" class="hover:text-[#FFD966] transition">About</a>
+        <a href="workspaces.html" class="hover:text-[#FFD966] transition">Workspaces</a>
+      </div>
+
+      <!-- Location & Info -->
+      <div class="flex flex-col items-center md:items-end space-y-2">
+        <h3 class="text-sm font-semibold uppercase tracking-wide text-white/90 mb-1">Visit Us</h3>
+        <p class="text-sm text-white/90">Gakere Road, Nyeri</p>
+        <p class="text-sm text-white/70">Open Mon–Sat, 8am–6pm</p>
+      </div>
+    </div>
+
+    <!-- Bottom Bar -->
+    <div class="flex flex-col md:flex-row justify-between items-center mt-6 text-sm text-white/70">
+      <p>© 2025 Mbaki House Hub. All rights reserved.</p>
+     
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>

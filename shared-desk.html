@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Shared Desk | Mbaki House Hub</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+  :root{
+    --brand-maroon: #602426;
+    --brand-accent: #D6791C;
+  }
+
+  /* RESET / layout basics */
+  html,body{height:100%;margin:0;padding:0;}
+
+  /* NAV: transparent by default, sits above hero */
+  nav.site-nav{
+    position: absolute;
+    top:0;
+    left:0;
+    width:100%;
+    z-index:60;
+    background: transparent;
+    transition: background-color .28s ease, box-shadow .28s ease;
+    -webkit-backdrop-filter: blur(0px);
+    backdrop-filter: blur(0px);
+  }
+
+  /* Container inside nav */
+  nav.site-nav .nav-inner{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    height:64px; /* nav height used for offsets */
+    padding-top:0;
+    padding-bottom:0;
+  }
+
+  /* Brand group (logo + title + tagline) */
+  .site-brand-group { display:flex; align-items:center; gap:.75rem; text-decoration:none; }
+  .logo-img { height:34px; width:auto; display:block; transition:filter .22s ease, transform .18s ease; }
+  .site-brand-name { font-weight:700; line-height:1; font-size:1.05rem; }
+  .site-tagline { font-size:.72rem; opacity:.9; margin-top:2px; }
+
+  /* White text over hero (default) */
+  .site-brand-group .site-brand-name,
+  .site-brand-group .site-tagline,
+  .nav-link,
+  nav.site-nav button {
+    color: #fff !important;
+    transition: color .2s ease;
+  }
+
+  /* Make logo invert on hero (for dark hero) if the image is dark colored */
+  .logo-img { filter: brightness(0) invert(1); }
+
+  /* Hover color: maroon */
+  .site-brand-group:hover .site-brand-name,
+  .nav-link:hover,
+  nav.site-nav button:hover {
+    color: var(--brand-maroon) !important;
+  }
+
+  /* Dropdown panel (white box) */
+  [data-dropdown-menu] {
+    background:#fff;
+    color:#111827;
+    border-radius:.5rem;
+    min-width:14rem;
+    box-shadow:0 8px 20px rgba(0,0,0,.12);
+    z-index:80;
+  }
+  [data-dropdown-menu] a { color:#374151; display:block; padding:.5rem 1rem; }
+  [data-dropdown-menu] a:hover{ color:var(--brand-accent); }
+
+  /* Mobile hamburger color */
+  #mobile-menu-button svg { stroke:#fff; transition:stroke .2s ease; }
+  #mobile-menu-button:hover svg { stroke:var(--brand-maroon); }
+
+  /* HERO: make sure it starts at the very top */
+  header.hero {
+    margin:0;
+    padding:0;
+    position:relative;
+    display:block;
+    /* adjust height as you like; keep nav overlapping */
+    min-height:52vh;
+  }
+  header.hero .hero-content { position:relative; z-index:40; padding-top: 5.25rem; /* keep hero content below nav visually */ }
+
+  /* MAIN: remove extra top margin (hero sits at top) */
+  main { margin-top:0; }
+
+  /* When nav receives .white-bg (after scrolling) */
+  nav.site-nav.white-bg{
+    background: rgba(255,255,255,0.98);
+    box-shadow: 0 1px 10px rgba(0,0,0,0.06);
+    backdrop-filter: blur(4px);
+  }
+  /* In white background state: show normal logo and maroon text */
+  nav.site-nav.white-bg .logo-img { filter: none; }
+  nav.site-nav.white-bg .site-brand-name,
+  nav.site-nav.white-bg .site-tagline,
+  nav.site-nav.white-bg .nav-link,
+  nav.site-nav.white-bg button {
+    color: var(--brand-maroon) !important;
+  }
+
+  /* Workspace card hover accent (unchanged) */
+  .workspace-card { border-left:4px solid transparent; transition:all .22s ease; }
+  .workspace-card:hover { border-left-color:var(--brand-maroon); transform:translateY(-3px); box-shadow:0 10px 24px rgba(0,0,0,0.08); }
+
+  /* Footer */
+  footer { background:var(--brand-maroon); color:#f3f4f6; }
+  footer a { color:#f3f4f6; }
+</style>
+
+
+</head>
+<a
+  href="https://wa.me/254768275201?text=Hi%20Mbaki%20House%20Hub,%20I%20would%20like%20to%20know%20more%20about%20your%20spaces."
+  target="_blank"
+  rel="noopener noreferrer"
+  aria-label="Chat with us on WhatsApp"
+  class="fixed right-4 bottom-6 z-50 flex items-center space-x-3 bg-[#8C1D26] hover:bg-[#4b1b1d] text-white px-4 py-2 rounded-full shadow-lg transition-transform transform hover:-translate-y-1"
+>
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    viewBox="0 0 32 32"
+    class="w-6 h-6"
+  >
+    <path
+      fill="#25D366"
+      d="M16 .7A15.3 15.3 0 0 0 2 23.8l-1.3 4.7a1 1 0 0 0 1.2 1.2l4.8-1.3A15.3 15.3 0 1 0 16 .7z"
+    />
+    <path
+      fill="#fff"
+      d="M23.3 19.4c-.4-.2-2.2-1.1-2.5-1.2s-.6-.2-.9.2-1 1.2-1.2 1.4-.4.3-.8.1a10 10 0 0 1-4.9-4.3c-.3-.5 0-.7.2-.9l.6-.7c.2-.2.3-.4.4-.7s0-.5 0-.7-.9-2.3-1.3-3.1c-.4-.8-.7-.7-.9-.7H10a1.7 1.7 0 0 0-1.2.6A4.8 4.8 0 0 0 8 12a8.2 8.2 0 0 0 1.7 5.1c2.1 3 5 4.9 8.4 5.8a7.9 7.9 0 0 0 1.8.2c.4 0 1 0 1.4-.8s1-1.3 1.2-1.7c.1-.4 0-.7-.1-.9z"
+    />
+  </svg>
+  <span class="font-medium text-sm hidden sm:inline">Chat on WhatsApp</span>
+</a>
+
+<body class="bg-gray-50 text-gray-800 font-sans">
+
+  <!-- NAVBAR -->
+  <nav class="site-nav" aria-label="Main navigation">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="nav-inner">
+      <!-- brand: logo + name + tagline -->
+      <a href="index.html" class="site-brand-group" aria-label="Mbaki House Hub home">
+        <img src="images/Mbakilogo.png" alt="Mbaki House Hub Logo" class="h-8 w-auto mt-1">
+        <div>
+          <div class="site-brand-name">Mbaki House Hub</div>
+          <div class="site-tagline">Gakere Road, Nyeri</div>
+        </div>
+      </a>
+
+      <!-- desktop menu -->
+      <div class="hidden md:flex md:items-center md:space-x-6">
+        <a href="index.html" class="nav-link font-medium">Home</a>
+
+        <div class="relative">
+          <button class="nav-link inline-flex items-center font-medium focus:outline-none" data-dropdown="workspaces" aria-expanded="false" aria-controls="menu-workspaces">
+            Workspaces
+            <svg class="ml-1 h-4 w-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+            </svg>
+          </button>
+
+          <div id="menu-workspaces" data-dropdown-menu="workspaces" class="hidden absolute right-0 mt-2" role="menu" aria-labelledby="workspaces">
+            <a href="shared-desk.html">Shared Desk</a>
+            <a href="dedicated-desk.html">Dedicated Desk</a>
+            <a href="meeting-room.html">Boardroom</a>
+            <a href="private-office.html">Private Offices</a>
+          </div>
+        </div>
+
+        <!-- <div class="relative">
+          <button class="nav-link inline-flex items-center font-medium focus:outline-none" data-dropdown="events" aria-expanded="false" aria-controls="menu-events">
+            Events
+            <svg class="ml-1 h-4 w-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+            </svg>
+          </button>
+
+          <div id="menu-events" data-dropdown-menu="events" class="hidden absolute right-0 mt-2" role="menu" aria-labelledby="events">
+            <a href="event-space.html">Event Space</a>
+            <a href="upcoming-events.html">Upcoming Events</a>
+          </div>
+        </div> -->
+
+        <a href="upcoming-events.html" class="nav-link font-medium">Events</a>
+        <a href="about.html" class="nav-link font-medium">About</a>
+      </div>
+
+      <!-- mobile toggle -->
+      <div class="md:hidden">
+        <button id="mobile-menu-button" aria-label="Toggle menu" class="p-2 rounded-md">
+          <svg class="h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" xmlns="http://www.w3.org/2000/svg">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+          </svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- mobile menu -->
+    <div id="mobile-menu" class="hidden md:hidden mt-2">
+      <div class="px-2 pt-2 pb-3 space-y-1 bg-white rounded-md">
+        <details class="bg-white rounded-md">
+          <summary class="px-3 py-2 cursor-pointer">Workspaces</summary>
+          <div class="pl-4">
+            <a href="shared-desk.html" class="block px-3 py-2">Shared Desk</a>
+            <a href="dedicated-desk.html" class="block px-3 py-2">Dedicated Desk</a>
+            <a href="meeting-room.html" class="block px-3 py-2">Boardroom</a>
+            <a href="private-office.html" class="block px-3 py-2">Private Offices</a>
+          </div>
+        </details>
+        <!-- <details class="bg-white rounded-md mt-1">
+          <summary class="px-3 py-2 cursor-pointer">Events</summary>
+          <div class="pl-4">
+            <a href="event-space.html" class="block px-3 py-2">Event Space</a>
+            <a href="upcoming-events.html" class="block px-3 py-2">Upcoming Events</a>
+          </div>
+        </details> -->
+        <a href="upcoming-events.html" class="block px-3 py-2">Events</a>
+        <a href="about.html" class="block px-3 py-2">About</a>
+      </div>
+    </div>
+  </div>
+</nav>
+
+
+  <!-- HERO -->
+  <section class="relative h-[56vh] md:h-[48vh] lg:h-[40vh]">
+    <img
+      src="images/uplcose5.jpeg"
+      alt="Shared desks coworking space"
+      class="absolute inset-0 w-full h-full object-cover"
+      loading="lazy"
+    />
+    <div class="absolute inset-0 bg-[#8C1D26]/72"></div>
+    <div class="relative z-10 flex items-center justify-center text-center px-6 h-full">
+      <div class="max-w-3xl text-white">
+        <h1 class="text-4xl md:text-5xl font-bold mb-3">Shared Desks</h1>
+        <p class="text-lg md:text-xl opacity-90">Flexible seating for freelancers, creatives, and entrepreneurs — plug in and get to work.</p>
+        <!-- <div class="mt-6">
+          <a href="contact.html" class="inline-block bg-white text-[#8C1D26] font-semibold px-6 py-3 rounded-lg shadow hover:opacity-95 transition">Book a Day</a>
+        </div> -->
+      </div>
+    </div>
+  </section>
+
+  <!-- MAIN: image on left + "What You Get" on right -->
+  <main class="container mx-auto px-6 py-16 grid gap-12 lg:grid-cols-2 items-start">
+    <!-- LEFT IMAGE -->
+    <div class="rounded-2xl overflow-hidden shadow-lg">
+      <img 
+        src="images/sharedarea.jpeg" 
+        alt="Professionals working at shared desks" 
+        class="w-full h-full object-cover"
+        loading="lazy"
+      />
+    </div>
+
+    <!-- RIGHT CONTENT -->
+  <div class="max-w-5xl mx-auto px-6">
+
+    <!-- Section Label -->
+    <div class="mb-3">
+      <span class="text-sm font-semibold tracking-widest text-[#8C1D26] uppercase">
+        What You Get
+      </span>
+    </div>
+
+    <!-- Heading -->
+    <h2 class="text-2xl md:text-3xl font-semibold text-gray-900 leading-tight mb-8">
+      Everything you need for a productive, flexible workday
+    </h2>
+
+    <!-- Feature List -->
+    <ul class="space-y-8">
+      <!-- High-speed Wi-Fi -->
+      <li class="flex items-start gap-4">
+        <!-- Wi-Fi Icon -->
+        <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-[#8C1D26] mt-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.111 16.318a4 4 0 015.778 0M12 20h.01M2.1 9.37a12 12 0 0119.8 0M5.23 12.98a8.5 8.5 0 0113.54 0" />
+        </svg>
+        <div>
+          <h3 class="text-base md:text-lg font-semibold text-gray-800">High-speed Wi-Fi</h3>
+          <p class="text-sm text-gray-600 leading-relaxed">
+            Reliable, fast internet so your work, video calls, and uploads flow smoothly all day.
+          </p>
+        </div>
+      </li>
+
+      <!-- Access to Kitchen -->
+      <li class="flex items-start gap-4">
+        <!-- Utensils Icon -->
+        <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-[#8C1D26] mt-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 3h16v3H4zM4 8h16v13H4zM10 8v13M14 8v13" />
+        </svg>
+        <div>
+          <h3 class="text-base md:text-lg font-semibold text-gray-800">Access to Kitchen</h3>
+          <p class="text-sm text-gray-600 leading-relaxed">
+            Make yourself at home — use our kitchenette for meals, tea, or coffee whenever you need a break.
+          </p>
+        </div>
+      </li>
+
+      <!-- Free Seating -->
+      <li class="flex items-start gap-4">
+        <!-- Chair Icon -->
+        <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-[#8C1D26] mt-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 12h12M6 16h12M9 8V4a2 2 0 012-2h2a2 2 0 012 2v4" />
+        </svg>
+        <div>
+          <h3 class="text-base md:text-lg font-semibold text-gray-800">Free Seating</h3>
+          <p class="text-sm text-gray-600 leading-relaxed">
+            Choose any open desk each day. Perfect for flexibility, spontaneous collaboration, and variety.
+          </p>
+        </div>
+      </li>
+
+      <!-- Networking Opportunities -->
+      <li class="flex items-start gap-4">
+        <!-- Users Icon -->
+        <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-[#8C1D26] mt-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5V9H2v11h5m10-6a4 4 0 11-8 0 4 4 0 018 0z" />
+        </svg>
+        <div>
+          <h3 class="text-base md:text-lg font-semibold text-gray-800">Networking Opportunities</h3>
+          <p class="text-sm text-gray-600 leading-relaxed">
+            Meet other professionals, share ideas, and build valuable connections in a friendly space.
+          </p>
+        </div>
+      </li>
+    </ul>
+
+    <!-- Pricing -->
+    <div class="mt-12">
+      <h3 class="text-xl font-semibold text-gray-900 mb-2">Pricing</h3>
+      <p class="text-base font-semibold text-[#8C1D26]">
+        Daily rate: <span class="font-bold">KSH 500</span>
+      </p>
+    </div>
+  </div>
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="bg-[#8C1D26] text-white pt-12 pb-8">
+  <div class="max-w-7xl mx-auto px-6">
+    <!-- Top Section -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-8 pb-10 border-b border-white/20">
+      
+      <!-- Logo + Brand -->
+      <div class="flex flex-col items-center md:items-start space-y-3">
+        <div class="flex items-center space-x-2">
+          <img src="images/Mbakilogo.png" alt="Mbaki House Hub Logo" class="h-10 w-auto">
+          <span class="text-lg font-semibold">Mbaki House Hub</span>
+        </div>
+        <p class="text-sm text-white/90 max-w-xs">
+          Spaces that inspire productivity, collaboration and growth.
+        </p>
+
+        <!-- Contact -->
+        <div class="flex items-center gap-2 text-sm text-white/90 mt-2">
+          <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.518 4.552a1 1 0 01-.272.993l-1.94 1.94a16.012 16.012 0 007.07 7.07l1.94-1.94a1 1 0 01.993-.272l4.552 1.518A1 1 0 0121 18.72V22a2 2 0 01-2 2h-1C9.716 24 0 14.284 0 2a2 2 0 012-2h1z" />
+          </svg>
+          <a href="tel:0768275201" class="hover:text-[#FFD966] transition">0768 275 201</a>
+        </div>
+      </div>
+
+      <!-- Quick Links -->
+      <div class="flex flex-col items-center md:items-start space-y-2">
+        <h3 class="text-sm font-semibold uppercase tracking-wide text-white/90 mb-1">Quick Links</h3>
+        <a href="home.html" class="hover:text-[#FFD966] transition">Home</a>
+        <a href="upcoming-events.html" class="hover:text-[#FFD966] transition">Events</a>
+        <a href="about.html" class="hover:text-[#FFD966] transition">About</a>
+        <a href="workspaces.html" class="hover:text-[#FFD966] transition">Workspaces</a>
+      </div>
+
+      <!-- Location & Info -->
+      <div class="flex flex-col items-center md:items-end space-y-2">
+        <h3 class="text-sm font-semibold uppercase tracking-wide text-white/90 mb-1">Visit Us</h3>
+        <p class="text-sm text-white/90">Gakere Road, Nyeri</p>
+        <p class="text-sm text-white/70">Open Mon–Sat, 8am–6pm</p>
+      </div>
+    </div>
+
+    <!-- Bottom Bar -->
+    <div class="flex flex-col md:flex-row justify-between items-center mt-6 text-sm text-white/70">
+      <p>© 2025 Mbaki House Hub. All rights reserved.</p>
+     
+    </div>
+  </div>
+</footer>
+
+  <!-- Small JS to control dropdowns and mobile menu (keeps behavior consistent across pages) -->
+  <script>
+    (function () {
+      const closeAll = () => {
+        document.querySelectorAll('[data-dropdown-menu]').forEach(menu => {
+          menu.classList.add('hidden');
+          const name = menu.getAttribute('data-dropdown-menu');
+          const btn = document.querySelector('[data-dropdown="'+name+'"]');
+          if (btn) btn.setAttribute('aria-expanded','false');
+        });
+      };
+
+      // Toggle specific menu by name
+      const toggleMenu = (name) => {
+        const menu = document.querySelector('[data-dropdown-menu="'+name+'"]');
+        const btn = document.querySelector('[data-dropdown="'+name+'"]');
+        if (!menu) return;
+        const isHidden = menu.classList.contains('hidden');
+        closeAll();
+        if (isHidden) {
+          menu.classList.remove('hidden');
+          if (btn) btn.setAttribute('aria-expanded','true');
+        }
+      };
+
+      // Click handler: open when clicking a dropdown button; otherwise close if click outside menus
+      document.addEventListener('click', (e) => {
+        const btn = e.target.closest('[data-dropdown]');
+        if (btn) {
+          e.preventDefault();
+          const name = btn.getAttribute('data-dropdown');
+          toggleMenu(name);
+          return;
+        }
+        // if click is inside an open menu or its button, ignore
+        if (e.target.closest('[data-dropdown-menu]') || e.target.closest('[data-dropdown]')) {
+          return;
+        }
+        closeAll();
+      });
+
+      // Close on Escape
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') closeAll();
+      });
+
+      // Mobile menu toggle
+      const mobileBtn = document.getElementById('mobile-menu-button');
+      const mobileMenu = document.getElementById('mobile-menu');
+      if (mobileBtn && mobileMenu) {
+        mobileBtn.addEventListener('click', () => {
+          mobileMenu.classList.toggle('hidden');
+        });
+      }
+
+      // Safety: close menus on resize (prevents stuck open state)
+      window.addEventListener('resize', () => closeAll());
+    })();
+
+    (function(){
+    const nav = document.querySelector('nav.site-nav');
+    const threshold = 80; // px scrolled before switching
+    if (!nav) return;
+    const onScroll = () => {
+      if (window.scrollY > threshold) {
+        nav.classList.add('white-bg');
+      } else {
+        nav.classList.remove('white-bg');
+      }
+    };
+    window.addEventListener('scroll', onScroll, { passive: true });
+    // run once
+    onScroll();
+  })();
+  </script>
+
+</body>
+</html>

@@ -1,0 +1,775 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Mbaki House Hub</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <style>
+    /* Smooth navbar and hero transitions */
+    nav {
+      transition: background-color 0.4s ease, box-shadow 0.4s ease;
+    }
+    .hero-bg {
+      background-attachment: fixed;
+    }
+    .fade-in {
+      opacity: 0;
+      transform: translateY(8px);
+      animation: fadeInUp 700ms ease forwards 200ms;
+    }
+    @keyframes fadeInUp {
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .cta-pulse {
+      animation: pulse 3s infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-3px); }
+    }
+
+    /* Dropdown safety & brand hover color */
+    [data-dropdown-menu] { z-index: 60; min-width: 14rem; }
+    [data-dropdown-menu] {
+      background-color: rgba(255,255,255,0.96);
+      backdrop-filter: blur(6px);
+    }
+    [data-dropdown-menu] a {
+      color: #2d3748 !important; /* tailwind gray-800 for readability */
+      text-decoration: none;
+    }
+    [data-dropdown-menu] a:hover {
+      color: #8C1D26 !important; /* brand hover */
+    }
+
+      /* When nav becomes solid, keep dropdown readable */
+    nav.bg-white\/95 [data-dropdown-menu] a {
+      color: #2d3748 !important;
+    }
+
+
+    /* Small responsive tweak so dropdowns don't get clipped on mobile edges */
+    @media (max-width: 768px) {
+      [data-dropdown-menu] { position: static; width: auto; box-shadow: none; background-color: transparent; backdrop-filter: none; }
+      [data-dropdown-menu] a { color: white !important; }
+    }
+     /* Our Story image treatments */
+  .our-story-row { display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; align-items: center; }
+  @media (max-width: 768px) { .our-story-row { grid-template-columns: 1fr; } }
+
+  .our-img {
+    position: relative;
+    border-radius: 14px;
+    overflow: hidden;
+    box-shadow: 0 18px 40px -18px rgba(96,36,38,0.22);
+  }
+
+  .our-img img {
+    display: block;
+    width: 100%;
+    height: 320px;               /* mobile height */
+    object-fit: cover;
+    object-position: center;
+    transition: transform .45s ease;
+  }
+  @media(min-width: 768px) {
+    .our-img img { height: 420px; } /* desktop height */
+  }
+
+  /* soft, brand-colored right-edge fade using pseudo element */
+  .our-img::after {
+    content: "";
+    position: absolute;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    width: 26%;
+    pointer-events: none;
+    background: linear-gradient(90deg, rgba(245,245,245,0) 0%, rgba(245,245,245,0.85) 70%);
+    mix-blend-mode: normal;
+  }
+
+  /* gentle hover scale */
+  .our-img:hover img { transform: scale(1.03); }
+
+  /* text column */
+  .our-story-text { border-left: 4px solid #8C1D26; padding-left: 1.5rem; }
+  .our-story-title { color: #8C1D26; margin-bottom: .75rem; font-weight:700; font-size:1.5rem; }
+  .our-story-p { color: #374151; line-height:1.65; margin-bottom:1rem; }
+
+  /* button identical to brand CTA */
+  .btn-brand {
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    padding: .6rem 1.1rem;
+    background:#8C1D26;
+    color:white;
+    border-radius:8px;
+    box-shadow: 0 6px 14px rgba(96,36,38,0.18);
+    transition: transform .18s ease, background .18s;
+    text-decoration:none;
+  }
+  .btn-brand:hover { transform: translateY(-3px); background: #4e1e1e; }
+
+  .reveal { opacity: 0; transform: translateY(10px); transition: opacity .5s cubic-bezier(.2,.9,.2,1), transform .5s cubic-bezier(.2,.9,.2,1); }
+  .reveal.in-view { opacity: 1; transform: none; }
+  .shadow-sm { box-shadow: 0 6px 18px -10px rgba(15,23,42,0.15); }
+
+  .brand-name { transition: color .28s ease; }
+  .brand-location { transition: color .28s ease; }
+
+  </style>
+</head>
+
+<!-- Floating WhatsApp (Tailwind) -->
+<!-- Floating WhatsApp Button (Mbaki theme) -->
+<a
+  href="https://wa.me/254768275201?text=Hi%20Mbaki%20House%20Hub,%20I%20would%20like%20to%20know%20more%20about%20your%20spaces."
+  target="_blank"
+  rel="noopener noreferrer"
+  aria-label="Chat with us on WhatsApp"
+  class="fixed right-4 bottom-6 z-50 flex items-center space-x-3 bg-[#8C1D26] hover:bg-[#4b1b1d] text-white px-4 py-2 rounded-full shadow-lg transition-transform transform hover:-translate-y-1"
+>
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    viewBox="0 0 32 32"
+    class="w-6 h-6"
+  >
+    <path
+      fill="#25D366"
+      d="M16 .7A15.3 15.3 0 0 0 2 23.8l-1.3 4.7a1 1 0 0 0 1.2 1.2l4.8-1.3A15.3 15.3 0 1 0 16 .7z"
+    />
+    <path
+      fill="#fff"
+      d="M23.3 19.4c-.4-.2-2.2-1.1-2.5-1.2s-.6-.2-.9.2-1 1.2-1.2 1.4-.4.3-.8.1a10 10 0 0 1-4.9-4.3c-.3-.5 0-.7.2-.9l.6-.7c.2-.2.3-.4.4-.7s0-.5 0-.7-.9-2.3-1.3-3.1c-.4-.8-.7-.7-.9-.7H10a1.7 1.7 0 0 0-1.2.6A4.8 4.8 0 0 0 8 12a8.2 8.2 0 0 0 1.7 5.1c2.1 3 5 4.9 8.4 5.8a7.9 7.9 0 0 0 1.8.2c.4 0 1 0 1.4-.8s1-1.3 1.2-1.7c.1-.4 0-.7-.1-.9z"
+    />
+  </svg>
+  <span class="font-medium text-sm hidden sm:inline">Chat on WhatsApp</span>
+</a>
+
+
+
+<body class="font-sans text-gray-800 antialiased">
+
+  <!-- NAVBAR (transparent, becomes solid on scroll) -->
+  <!-- NAVBAR -->
+<!-- NAVBAR -->
+<!-- NAVBAR -->
+<nav id="navbar" class="fixed top-0 left-0 w-full z-50 bg-transparent transition-all duration-300">
+  <div class="max-w-7xl mx-auto px-6">
+    <div class="flex justify-between items-end h-20">
+      <!-- LEFT: logo + stacked brand -->
+      <a href="home.html" class="flex items-center gap-3 group" aria-label="Go to homepage">
+        <img src="images/Mbakilogo.png" alt="Mbaki House Hub logo" class="h-9 w-auto" />
+        <div class="flex flex-col leading-tight">
+          <span class="brand-name text-lg md:text-2xl font-semibold text-white leading-tight transition">Mbaki House Hub</span>
+          <span class="brand-location text-base text-white transition">Gakere Road</span>
+        </div>
+      </a>
+
+      <!-- DESKTOP LINKS -->
+      <div class="hidden md:flex items-end space-x-8 pb-1">
+        <a href="home.html" class="nav-link text-white hover:text-[#8C1D26] transition">Home</a>
+
+        <!-- Workspaces (desktop) -->
+        <div class="relative flex items-center">
+          <a href="workspaces.html" class="nav-link text-white hover:text-[#8C1D26] transition mr-1">Workspaces</a>
+          <button class="text-white hover:text-[#8C1D26] focus:outline-none transition" data-dropdown="workspaces" aria-expanded="false" aria-controls="workspaces-menu">
+            <svg class="w-4 h-4 inline-block" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+            </svg>
+          </button>
+
+          <div id="workspaces-menu"
+               data-dropdown-menu="workspaces"
+               class="hidden absolute right-0 top-full mt-2 w-56 bg-white/95 backdrop-blur-sm rounded-md shadow-lg ring-1 ring-black ring-opacity-5 z-50 origin-top-right"
+               role="menu">
+            <a href="shared-desk.html" class="block px-4 py-2 text-gray-700 hover:text-[#8C1D26]" role="menuitem">Shared Desk</a>
+            <a href="dedicated-desk.html" class="block px-4 py-2 text-gray-700 hover:text-[#8C1D26]" role="menuitem">Dedicated Desk</a>
+            <a href="meeting-room.html" class="block px-4 py-2 text-gray-700 hover:text-[#8C1D26]" role="menuitem">Meeting Rooms</a>
+            <a href="private-office.html" class="block px-4 py-2 text-gray-700 hover:text-[#8C1D26]" role="menuitem">Private Offices</a>
+          </div>
+        </div>
+
+        <a href="upcoming-events.html" class="nav-link text-white hover:text-[#8C1D26] transition">Events</a>
+        <a href="about.html" class="nav-link text-white hover:text-[#8C1D26] transition">About</a>
+      </div>
+
+      <!-- MOBILE: hamburger -->
+      <div class="md:hidden flex items-center">
+        <button id="mobile-menu-button" aria-expanded="false" aria-controls="mobile-menu"
+                class="inline-flex items-center justify-center p-2 rounded-md text-white hover:text-[#8C1D26] focus:outline-none">
+          <!-- hamburger -->
+          <svg id="mobile-open-icon" class="w-6 h-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 8h16M4 16h16" />
+          </svg>
+          <!-- close icon (hidden by default) -->
+          <svg id="mobile-close-icon" class="w-6 h-6 hidden" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MOBILE MENU: hidden on md+ -->
+  <div id="mobile-menu" class="hidden md:hidden bg-[#8C1D26]/95 text-white">
+    <div class="max-w-7xl mx-auto px-6 py-6">
+      <nav class="flex flex-col space-y-3">
+        <a href="home.html" class="block py-2 px-2 rounded hover:bg-white/6">Home</a>
+
+        <!-- Mobile Workspaces expandable -->
+        <div class="border-t border-white/10 pt-3">
+          <button id="mobile-workspaces-toggle" aria-expanded="false"
+                  class="w-full flex items-center justify-between py-2 px-2 rounded hover:bg-white/6">
+            <span>Workspaces</span>
+            <svg class="w-4 h-4 transform transition-transform" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+            </svg>
+          </button>
+
+          <div id="mobile-workspaces-list" class="mt-2 hidden pl-3 space-y-2">
+            <a href="shared-desk.html" class="block py-2 px-2 rounded hover:bg-white/6">Shared Desk</a>
+            <a href="dedicated-desk.html" class="block py-2 px-2 rounded hover:bg-white/6">Dedicated Desk</a>
+            <a href="meeting-room.html" class="block py-2 px-2 rounded hover:bg-white/6">Meeting Rooms</a>
+            <a href="private-office.html" class="block py-2 px-2 rounded hover:bg-white/6">Private Offices</a>
+          </div>
+        </div>
+
+        <a href="upcoming-events.html" class="block py-2 px-2 rounded hover:bg-white/6">Events</a>
+        <a href="about.html" class="block py-2 px-2 rounded hover:bg-white/6">About</a>
+
+        <!-- contact -->
+       <a href="tel:0768275201" class="flex items-center gap-2 py-2 px-2 rounded hover:bg-white/6 transition">
+        <!-- Phone Icon -->
+        <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 flex-shrink-0 text-[#FFD966]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+            d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.518 4.552a1 1 0 01-.272.993l-1.94 1.94a16.012 16.012 0 007.07 7.07l1.94-1.94a1 1 0 01.993-.272l4.552 1.518A1 1 0 0121 18.72V22a2 2 0 01-2 2h-1C9.716 24 0 14.284 0 2a2 2 0 012-2h1z" />
+        </svg>
+        <span>0768 275 201</span>
+      </a>
+
+      </nav>
+    </div>
+  </div>
+</nav>
+
+
+
+
+  <!-- FULLSCREEN HERO -->
+  <header class="relative h-screen w-full overflow-hidden">
+  <!-- Desktop Background -->
+  <div class="absolute inset-0 hidden md:block bg-center bg-cover"
+       style="background-image: url('images/IMG_3029.jpeg');"
+       aria-label="Workspace at Mbaki House Hub"></div>
+
+  <!-- Mobile Image Fallback -->
+  <div class="absolute inset-0 md:hidden">
+    <img src="images/heromobile.jpeg"
+         alt="Workspace at Mbaki House Hub"
+         class="w-full h-full object-cover">
+  </div>
+
+  <!-- Brand Tint Overlay -->
+  <div class="absolute inset-0 bg-[#8C1D26]/0 mix-blend-multiply"></div>
+
+  <!-- Hero Content -->
+  <div class="relative z-10 h-full flex items-start justify-center px-6 pt-[20vh] md:pt-[18vh]">
+    <div class="max-w-4xl text-center text-white">
+      <h1 class="text-4xl md:text-6xl lg:text-7xl font-extrabold leading-tight drop-shadow-lg fade-in">
+        Create. Connect. Thrive.
+      </h1>
+
+      <p class="mt-6 text-lg md:text-xl lg:text-2xl text-white/90 max-w-2xl mx-auto fade-in">
+        Mbaki House Hub — From flexible day passes for freelancers to dedicated monthly desks and fully equipped boardrooms — Mbaki House Hub has a space designed for the way you work.
+      </p>
+
+      <div class="mt-8 flex flex-col sm:flex-row gap-3 sm:justify-center fade-in">
+        <!-- Explore Spaces Button -->
+        <a href="workspaces.html"
+           class="inline-flex items-center justify-center px-6 py-3 rounded-md text-base font-semibold bg-[#8C1D26] text-white shadow-lg hover:bg-[#4e1e1e] focus:outline-none focus:ring-2 focus:ring-[#8C1D26] focus:ring-offset-2 cta-pulse">
+          Explore Spaces
+        </a>
+
+        <!-- Our Story Button -->
+        <a href="#our-story"
+           class="inline-flex items-center justify-center px-6 py-3 rounded-md text-base font-medium bg-white/10 text-white border border-white/20 hover:bg-white/20 focus:outline-none focus:ring-2 focus:ring-white/10">
+          Our Story
+        </a>
+      </div>
+
+      <!-- Pricing Line -->
+      <div class="mt-6 fade-in">
+      <span class="inline-block px-4 py-2 rounded-md bg-[#8C1D26]/50 backdrop-blur-sm text-lg md:text-xl font-semibold text-[#FFD966] drop-shadow-sm">
+        From KSH 500/day • Weekly and Monthly options available
+      </span>
+    </div>
+
+
+    </div>
+  </div>
+
+  <!-- Scroll Down Arrow -->
+  <a href="#workspaces"
+     class="absolute left-1/2 -translate-x-1/2 bottom-8 text-white/90 hover:text-white"
+     aria-label="Scroll to workspaces">
+    <div class="flex flex-col items-center space-y-2">
+      <svg class="w-6 h-6 animate-bounce" fill="none" stroke="currentColor"
+           viewBox="0 0 24 24" aria-hidden="true">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M19 9l-7 7-7-7" />
+      </svg>
+      <span class="text-xs">Explore</span>
+    </div>
+  </a>
+</header>
+
+
+  <!-- Mission -->
+  <section id="mission-values" class="bg-white">
+  <div class="max-w-5xl mx-auto px-6 py-10 md:py-12">
+
+    <!-- Mission -->
+    <div class="text-center mb-4">
+      <h2 class="text-2xl md:text-3xl font-semibold text-gray-900 leading-tight reveal" data-delay="0">
+        Our Mission
+      </h2>
+
+      <p class="mt-3 max-w-3xl mx-auto text-gray-600 leading-relaxed reveal" data-delay="80">
+        At Mbaki House Hub, we’re dedicated to fostering a dynamic and supportive environment where
+        individuals and teams can thrive. Our mission is to provide flexible, inspiring workspaces that
+        empower members to achieve their goals and build meaningful connections.
+      </p>
+
+      <!-- Divider -->
+      <div class="mx-auto w-20 h-0.5 bg-[#8C1D26]/60 rounded-full mt-4 reveal" data-delay="160" aria-hidden="true"></div>
+    </div>
+  </div>
+
+  <!-- Values band -->
+  <div class="bg-[#8C1D26]/6">
+    <div class="max-w-5xl mx-auto px-6 py-8 md:py-10">
+
+      <div class="text-center mb-6">
+        <h3 class="text-xl md:text-2xl font-semibold text-gray-900 reveal" data-delay="220">Our Values</h3>
+        <p class="mt-1 text-sm text-gray-600 reveal" data-delay="260">
+          The principles that guide how we work, collaborate, and grow together.
+        </p>
+      </div>
+
+      <!-- Values grid -->
+      <ul class="grid grid-cols-1 md:grid-cols-3 gap-5 md:gap-6">
+        <!-- Community -->
+        <li class="reveal transform transition-all duration-450 ease-out hover:-translate-y-1 bg-white/90 rounded-lg p-5 shadow-sm" data-delay="320">
+          <div class="flex items-start gap-3">
+            <svg class="w-6 h-6 text-[#8C1D26] flex-shrink-0 mt-1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 2l3 7h7l-5.5 4 2 7L12 17l-6.5 3 2-7L2 9h7l3-7z" />
+            </svg>
+            <div>
+              <h4 class="text-lg font-semibold text-gray-800">Community</h4>
+              <p class="mt-1 text-sm text-gray-600 leading-relaxed">
+                We believe in the power of connection and mutual support — community sits at the heart of everything we do.
+              </p>
+            </div>
+          </div>
+        </li>
+
+        <!-- Innovation -->
+        <li class="reveal transform transition-all duration-450 ease-out hover:-translate-y-1 bg-white/90 rounded-lg p-5 shadow-sm" data-delay="380">
+          <div class="flex items-start gap-3">
+            <svg class="w-6 h-6 text-[#8C1D26] flex-shrink-0 mt-1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+            </svg>
+            <div>
+              <h4 class="text-lg font-semibold text-gray-800">Innovation</h4>
+              <p class="mt-1 text-sm text-gray-600 leading-relaxed">
+                We encourage creativity and forward-thinking; our spaces are designed to inspire new ideas and solutions.
+              </p>
+            </div>
+          </div>
+        </li>
+
+        <!-- Collaboration -->
+        <li class="reveal transform transition-all duration-450 ease-out hover:-translate-y-1 bg-white/90 rounded-lg p-5 shadow-sm" data-delay="440">
+          <div class="flex items-start gap-3">
+            <svg class="w-6 h-6 text-[#8C1D26] flex-shrink-0 mt-1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a4 4 0 00-4-4h-1M7 20H2v-2a4 4 0 014-4h1m8-6a4 4 0 11-8 0 4 4 0 018 0z" />
+            </svg>
+            <div>
+              <h4 class="text-lg font-semibold text-gray-800">Collaboration</h4>
+              <p class="mt-1 text-sm text-gray-600 leading-relaxed">
+                We value teamwork and shared success. Our environment promotes collaboration and collective growth.
+              </p>
+            </div>
+          </div>
+        </li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+  <!-- Our Story -->
+  <!-- Our Story (with maroon accent theme) -->
+<!-- Our Story (with deeper maroon tone) -->
+<section id="our-story" class="py-16" style="background: rgba(59,20,20,0.06);">
+  <div class="max-w-7xl mx-auto px-6">
+    <div class="our-story-row">
+      <div class="our-img" aria-hidden="true" style="box-shadow: 0 18px 40px -18px rgba(59,20,20,0.28);">
+        <img src="images/sharedarea.jpeg" alt="Workspace at Mbaki House Hub">
+      </div>
+
+      <div class="our-story-text" style="border-left: 4px solid #3B1414;">
+        <h2 class="our-story-title" style="color: #8C1D26;">Our Story</h2>
+
+        <p class="our-story-p">At Mbaki House Hub, we believe in building more than just a space to work...</p>
+        <p class="our-story-p">Our journey started with a simple idea — to bring Nyeri’s professionals together in a space that inspires focus, connection, and growth.</p>
+
+        <a href="about.html"
+           class="inline-flex items-center justify-center px-6 py-3 rounded-md text-base font-semibold bg-[#8C1D26] text-white shadow-md hover:bg-[#2B0C0C] focus:outline-none focus:ring-2 focus:ring-[#3B1414] focus:ring-offset-2 transition-all duration-200">
+          Learn More
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+
+
+  <!-- Workspaces -->
+  <!-- Workspaces -->
+<!-- Workspaces -->
+<section id="workspaces" class="py-16">
+  <div class="max-w-7xl mx-auto px-6 text-center">
+    <h2 class="text-3xl font-bold mb-10 text-[#8C1D26]">Workspaces at Mbaki House Hub</h2>
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+      
+      <!-- Hot Desks Card -->
+      <a href="shared-desk.html"
+         class="group bg-white rounded-lg shadow-lg overflow-hidden transform transition-all duration-300 hover:-translate-y-2 hover:shadow-[0_12px_25px_-8px_rgba(96,36,38,0.45)] block text-left">
+        <img src="images/hotdesk.jpeg"
+             alt="Hot Desk"
+             loading="lazy"
+             class="w-full h-48 object-cover transition-transform duration-300 group-hover:scale-105" />
+        <div class="p-6">
+          <h3 class="text-xl font-semibold mb-2 text-[#8C1D26] group-hover:text-[#4E1E1E] transition-colors duration-300">
+            Hot Desks
+          </h3>
+          <p class="text-gray-600 text-sm">
+            Flexible seating in a vibrant shared space. Perfect for freelancers, remote workers, or those who love variety.
+          </p>
+        </div>
+      </a>
+
+      <!-- Dedicated Desks Card -->
+      <a href="dedicated-desk.html"
+         class="group bg-white rounded-lg shadow-lg overflow-hidden transform transition-all duration-300 hover:-translate-y-2 hover:shadow-[0_12px_25px_-8px_rgba(96,36,38,0.45)] block text-left">
+        <img src="images/dedicateddesk.jpeg"
+             alt="Dedicated Desk"
+             loading="lazy"
+             class="w-full h-48 object-cover transition-transform duration-300 group-hover:scale-105" />
+        <div class="p-6">
+          <h3 class="text-xl font-semibold mb-2 text-[#8C1D26] group-hover:text-[#4E1E1E] transition-colors duration-300">
+            Dedicated Desks
+          </h3>
+          <p class="text-gray-600 text-sm">
+            Your own desk in a shared environment — keep your monitor, books, and setup just how you like it.
+          </p>
+        </div>
+      </a>
+
+      <!-- Meeting Rooms Card -->
+      <a href="meeting-room.html"
+         class="group bg-white rounded-lg shadow-lg overflow-hidden transform transition-all duration-300 hover:-translate-y-2 hover:shadow-[0_12px_25px_-8px_rgba(96,36,38,0.45)] block text-left">
+        <img src="images/meeting-room.jpeg"
+             alt="Boardroom"
+             loading="lazy"
+             class="w-full h-48 object-cover transition-transform duration-300 group-hover:scale-105" />
+        <div class="p-6">
+          <h3 class="text-xl font-semibold mb-2 text-[#8C1D26] group-hover:text-[#4E1E1E] transition-colors duration-300">
+            Boardroom
+          </h3>
+          <p class="text-gray-600 text-sm">
+            Fully equipped private spaces for client meetings, team discussions, and brainstorming sessions.
+          </p>
+        </div>
+      </a>
+
+    </div>
+  </div>
+</section>
+
+
+
+  <!-- Footer (uses brand color #8C1D26) -->
+  <!-- FOOTER -->
+<!-- FOOTER -->
+<!-- FOOTER -->
+<!-- FOOTER -->
+<footer class="bg-[#8C1D26] text-white pt-12 pb-8">
+  <div class="max-w-7xl mx-auto px-6">
+    <!-- Top Section -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-8 pb-10 border-b border-white/20">
+      
+      <!-- Logo + Brand -->
+      <div class="flex flex-col items-center md:items-start space-y-3">
+        <div class="flex items-center space-x-2">
+          <img src="images/Mbakilogo.png" alt="Mbaki House Hub Logo" class="h-10 w-auto">
+      <span class="brand-name text-lg md:text-2xl font-semibold text-white leading-tight group-hover:text-[#8C1D26] transition">
+        Mbaki House Hub
+      </span>
+
+        </div>
+        <p class="text-sm text-white/90 max-w-xs">
+          Spaces that inspire productivity, collaboration and growth.
+        </p>
+
+        <!-- Contact -->
+        <div class="flex items-center gap-2 text-sm text-white/90 mt-2">
+          <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.518 4.552a1 1 0 01-.272.993l-1.94 1.94a16.012 16.012 0 007.07 7.07l1.94-1.94a1 1 0 01.993-.272l4.552 1.518A1 1 0 0121 18.72V22a2 2 0 01-2 2h-1C9.716 24 0 14.284 0 2a2 2 0 012-2h1z" />
+          </svg>
+          <a href="tel:0768275201" class="hover:text-[#FFD966] transition">0768 275 201</a>
+        </div>
+      </div>
+
+      <!-- Quick Links -->
+      <div class="flex flex-col items-center md:items-start space-y-2">
+        <h3 class="text-sm font-semibold uppercase tracking-wide text-white/90 mb-1">Quick Links</h3>
+        <a href="home.html" class="hover:text-[#FFD966] transition">Home</a>
+        <a href="upcoming-events.html" class="hover:text-[#FFD966] transition">Events</a>
+        <a href="about.html" class="hover:text-[#FFD966] transition">About</a>
+        <a href="workspaces.html" class="hover:text-[#FFD966] transition">Workspaces</a>
+      </div>
+
+      <!-- Location & Info -->
+      <div class="flex flex-col items-center md:items-end space-y-2">
+        <h3 class="text-sm font-semibold uppercase tracking-wide text-white/90 mb-1">Visit Us</h3>
+        <p class="text-sm text-white/90">Gakere Road, Nyeri</p>
+        <p class="text-sm text-white/70">Open Mon–Sat, 8am–6pm</p>
+      </div>
+    </div>
+
+    <!-- Bottom Bar -->
+    <div class="flex flex-col md:flex-row justify-between items-center mt-6 text-sm text-white/70">
+      <p>© 2025 Mbaki House Hub. All rights reserved.</p>
+     
+    </div>
+  </div>
+</footer>
+
+
+
+
+
+  <!-- JAVASCRIPT -->
+<script>
+/* -------------------------
+   Unified site UI script
+   Replaces previous nav/dropdown/scroll/mobile/reveal logic
+   ------------------------- */
+(function () {
+  /* ---------- Utilities ---------- */
+  const $ = (sel, ctx = document) => ctx.querySelector(sel);
+  const $$ = (sel, ctx = document) => Array.from(ctx.querySelectorAll(sel));
+
+  /* ---------- Dropdowns (desktop) ---------- */
+  (function setupDropdowns() {
+    const closeAll = () => $$('[data-dropdown-menu]').forEach(m => m.classList.add('hidden'));
+
+    document.addEventListener('click', (e) => {
+      const btn = e.target.closest('[data-dropdown]');
+      if (btn) {
+        e.preventDefault();
+        const name = btn.getAttribute('data-dropdown');
+        const menu = document.querySelector(`[data-dropdown-menu="${name}"]`);
+        // close others and toggle this
+        $$('[data-dropdown-menu]').forEach(m => { if (m !== menu) m.classList.add('hidden'); });
+        if (menu) menu.classList.toggle('hidden');
+        return;
+      }
+
+      // click outside any dropdown/button closes all
+      if (!e.target.closest('[data-dropdown]') && !e.target.closest('[data-dropdown-menu]')) {
+        closeAll();
+      }
+    });
+
+    // close on Escape
+    document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeAll(); });
+  }());
+
+  /* ---------- Navbar transparent <-> solid on scroll (brand color toggles) ---------- */
+  (function setupNavbarScroll() {
+    const navbar = document.getElementById('navbar');
+    if (!navbar) return;
+
+    const setSolidNav = () => {
+      navbar.classList.add('bg-white', 'shadow-md', 'backdrop-blur-sm');
+      navbar.classList.remove('bg-transparent');
+
+      // nav links -> dark for contrast (limit to common link/button elements)
+      navbar.querySelectorAll('a, button').forEach(el => {
+        if (el.classList) {
+          el.classList.remove('text-white');
+          el.classList.add('text-gray-800');
+        } else {
+          el.style.color = ''; // safety
+        }
+      });
+
+      // BRAND NAME + LOCATION -> maroon (class + inline fallback)
+      const brand = navbar.querySelector('.brand-name');
+      if (brand) { brand.classList.remove('text-white'); brand.classList.add('text-[#8C1D26]'); brand.style.color = '#8C1D26'; }
+      const loc = navbar.querySelector('.brand-location');
+      if (loc)   { loc.classList.remove('text-white');   loc.classList.add('text-[#8C1D26]');   loc.style.color = '#8C1D26'; }
+
+      // ensure dropdown anchors remain readable
+      $$('[data-dropdown-menu] a').forEach(a => a.style.color = '#2d3748');
+    };
+
+    const setTransparentNav = () => {
+      navbar.classList.remove('bg-white', 'shadow-md', 'backdrop-blur-sm');
+      navbar.classList.add('bg-transparent');
+
+      navbar.querySelectorAll('a, button').forEach(el => {
+        if (el.classList) {
+          el.classList.remove('text-gray-800');
+          el.classList.add('text-white');
+        } else {
+          el.style.color = '';
+        }
+      });
+
+      const brand = navbar.querySelector('.brand-name');
+      if (brand) { brand.classList.remove('text-[#8C1D26]'); brand.classList.add('text-white'); brand.style.color = ''; }
+      const loc = navbar.querySelector('.brand-location');
+      if (loc)   { loc.classList.remove('text-[#8C1D26]');   loc.classList.add('text-white');   loc.style.color = ''; }
+
+      $$('[data-dropdown-menu] a').forEach(a => a.style.color = '#2d3748');
+    };
+
+    // initial state (protect against flash before scroll handler runs)
+    if (window.scrollY > 80) setSolidNav(); else setTransparentNav();
+
+    // efficient scroll listener
+    let ticking = false;
+    window.addEventListener('scroll', () => {
+      if (!ticking) {
+        window.requestAnimationFrame(() => {
+          if (window.scrollY > 80) setSolidNav(); else setTransparentNav();
+          ticking = false;
+        });
+        ticking = true;
+      }
+    }, { passive: true });
+  }());
+
+  /* ---------- Mobile menu + nested Workspaces toggle ---------- */
+  (function setupMobileMenu() {
+    const mobileBtn = document.getElementById('mobile-menu-button');
+    const mobileMenu = document.getElementById('mobile-menu');
+    const mobileWorkToggle = document.getElementById('mobile-workspaces-toggle');
+    const mobileWorkList = document.getElementById('mobile-workspaces-list');
+
+    if (mobileBtn && mobileMenu) {
+      mobileBtn.addEventListener('click', () => {
+        const opened = !mobileMenu.classList.contains('hidden');
+        if (opened) {
+          mobileMenu.classList.add('hidden');
+          mobileBtn.setAttribute('aria-expanded', 'false');
+          // if you use open/close icons, toggle them here (defensive)
+          const openIcon = document.getElementById('mobile-open-icon');
+          const closeIcon = document.getElementById('mobile-close-icon');
+          if (openIcon && closeIcon) { openIcon.classList.remove('hidden'); closeIcon.classList.add('hidden'); }
+        } else {
+          mobileMenu.classList.remove('hidden');
+          mobileBtn.setAttribute('aria-expanded', 'true');
+          const openIcon = document.getElementById('mobile-open-icon');
+          const closeIcon = document.getElementById('mobile-close-icon');
+          if (openIcon && closeIcon) { openIcon.classList.add('hidden'); closeIcon.classList.remove('hidden'); }
+        }
+      });
+    }
+
+    if (mobileWorkToggle && mobileWorkList) {
+      mobileWorkToggle.addEventListener('click', () => {
+        const open = !mobileWorkList.classList.contains('hidden');
+        if (open) {
+          mobileWorkList.classList.add('hidden');
+          mobileWorkToggle.setAttribute('aria-expanded', 'false');
+          const svg = mobileWorkToggle.querySelector('svg');
+          if (svg) svg.style.transform = '';
+        } else {
+          mobileWorkList.classList.remove('hidden');
+          mobileWorkToggle.setAttribute('aria-expanded', 'true');
+          const svg = mobileWorkToggle.querySelector('svg');
+          if (svg) svg.style.transform = 'rotate(180deg)';
+        }
+      });
+    }
+  }());
+
+  /* ---------- Gentle parallax for .our-story-bg (if present) ---------- */
+  (function setupParallax() {
+    const el = document.querySelector('.our-story-bg');
+    if (!el) return;
+    const maxOffset = 30;
+    function update() {
+      const rect = el.getBoundingClientRect();
+      const midpoint = window.innerHeight / 2;
+      const norm = Math.max(-1, Math.min(1, (rect.top + rect.height/2 - midpoint) / midpoint));
+      const offset = -norm * (maxOffset * 0.8);
+      el.style.transform = `translateY(${offset}px)`;
+    }
+    window.addEventListener('scroll', update, { passive: true });
+    window.addEventListener('resize', update);
+    update();
+  }());
+
+  /* ---------- Reveal on scroll (IntersectionObserver) ---------- */
+  (function setupReveal() {
+    const reveals = document.querySelectorAll('.reveal');
+    if (!('IntersectionObserver' in window) || reveals.length === 0) {
+      reveals.forEach(el => el.classList.add('in-view'));
+      return;
+    }
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (!entry.isIntersecting) return;
+        const el = entry.target;
+        const delay = parseInt(el.dataset.delay || 0, 10);
+        window.setTimeout(() => el.classList.add('in-view'), delay);
+        observer.unobserve(el);
+      });
+    }, { threshold: 0.12 });
+
+    reveals.forEach(el => observer.observe(el));
+  }());
+
+  /* ---------- Accessibility: close menus on Escape (global) ---------- */
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') {
+      $$('[data-dropdown-menu]').forEach(m => m.classList.add('hidden'));
+      const mobileMenu = document.getElementById('mobile-menu');
+      if (mobileMenu) mobileMenu.classList.add('hidden');
+      const mobileOpenIcon = document.getElementById('mobile-open-icon');
+      const mobileCloseIcon = document.getElementById('mobile-close-icon');
+      if (mobileOpenIcon && mobileCloseIcon) {
+        mobileOpenIcon.classList.remove('hidden'); mobileCloseIcon.classList.add('hidden');
+      }
+    }
+  });
+}());
+</script>
+
+
+
+</body>
+</html>
